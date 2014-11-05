@@ -3096,12 +3096,12 @@ function webform_client_form_pages($form, &$form_state) {
               ($component['type'] == 'faux' || _webform_client_form_rule_check($node, $component, $page_num, $form_state['values']['submitted']) == WEBFORM_CONDITIONAL_INCLUDE)) {
             if ($component['type'] == 'faux') {
               if ($forward) {
-                if (!$form_state['webform']['preview']) {
+                /*if (!$form_state['webform']['preview']) {
                   // Force a preview to avert an unintended submission via Next.
                   $form_state['webform']['preview'] = TRUE;
                   $form_state['storage']['preview'] = TRUE;
                   $form_state['storage']['page_count']++;
-                }
+                }*/
               }
               else {
                 $page_num = max (1, $page_num);

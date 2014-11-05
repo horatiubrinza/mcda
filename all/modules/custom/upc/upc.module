@@ -1,0 +1,35 @@
+<?php
+
+/**
+ *  Implements hook_form_FORM_ID_alter().
+ */
+function upc_form_webform_client_form_alter(&$form, &$form_state, $form_id)
+{
+    //add custom validate handler
+    $form['#validate'][] = 'upc_custom_validate_handler';
+}
+
+function upc_custom_validate_handler($form, &$form_state)
+{
+    if (!isset($form_state['values']['submitted'])) {
+        return;
+    }
+    $submittedValues = $form_state['values']['submitted'];
+
+    if (isset($submittedValues['fieldset_email'])) {
+
+        $mailValues = $submittedValues['fieldset_email'];
+
+        $intern =
+            $mailValues['fieldset_email_server']['email_server_location'] == 'local'
+            || $mailValues['fieldset_email_server']['fieldset_email_server_datacenter']['mail_server_in_tara_sau_extern'] == 'intern';
+
+        $mailQuota =
+            $mailValues['fieldset_email_size']['email_number_users'] *
+            $mailValues['fieldset_email_size']['email_average_number'] *
+            $mailValues['fieldset_email_size']['email_average_size'];
+
+        $element = $form['submitted']['fieldset_email']['email_needed'];
+        form_set_value($element, $intern.'|'.$mailQuota, $form_state);
+    }
+}
